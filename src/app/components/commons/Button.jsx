@@ -1,12 +1,14 @@
-import React from 'react';
-import {Button} from "react-bootstrap";
+import React from "react";
+import { Button } from "react-bootstrap";
 
-function Buttons({btnName, variant, Onclicked, disabled}) {
-    return (
-        <div>
-            <Button variant={variant} disabled={disabled} onClick={Onclicked}>{btnName}</Button>
-        </div>
-    )
+function CommonButton({ btnName, variant, onClicked, disabled }) {
+  return (
+    <div>
+      <Button variant={variant} disabled={disabled} onClick={onClicked}>
+        {btnName}
+      </Button>
+    </div>
+  );
 }
 
-export default Buttons;
+export default CommonButton;

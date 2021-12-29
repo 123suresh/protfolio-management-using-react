@@ -8,6 +8,31 @@
 .dropdown{
     text-align: right;
 }
-.update__icon{
-    border: none;
+
+.emptyValue{
+    color: red;
 }
+.update__icon{
+    color: green;
+    border: none ;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover{
+        transform: scale(1.5);
+    }
+}
+@media only screen and (max-width: 767px) {
+    .bought__share-table{
+        width: 20px;
+    }
+    .dropdown{
+        text-align: left;
+    }
+    .sold__share-table{
+        width: 20px;
+    }
+    .bought__share-table{
+        width: 20px;
+    }
+  }

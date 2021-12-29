@@ -22,6 +22,7 @@
 }
 .login__submit{
     text-align: center;
+    margin-top: 25px;
 }
 .login__main{
     padding-top: 100px;
@@ -30,6 +31,12 @@
     color: white;
     font-size: 15px;
 }
-.wrong__validation{
+.wrong__validation {
     color: rgb(199, 13, 13);
+    margin-top: -21px;
+    margin: 0;
+    padding: 0;
+}
+.password_field{
+    margin-top: 20px;
 }

@@ -1,14 +1,20 @@
-import React from 'react';
+import React from "react";
 import { Row, Col, Toast } from "react-bootstrap";
 
-function Toasts({showToast, setShowToast, sell_buy}) {
-    return (
+function CommonToast({ showToast, setShowToast, sell_buy }) {
+  return (
     <Row>
       <Col xs={6}>
-        <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={3000}
+          autohide
+          position='top-end'
+        >
           <Toast.Header>
             <img
-            //   src="holder.js/20x20?text=%20"
+              //   src="holder.js/20x20?text=%20"
               className="rounded me-2"
               alt=""
             />
@@ -21,7 +27,7 @@ function Toasts({showToast, setShowToast, sell_buy}) {
         <Button onClick={() => setShowToast(true)}>Show Toast</Button>
       </Col> */}
     </Row>
-    )
+  );
 }
 
-export default Toasts;
+export default CommonToast;
