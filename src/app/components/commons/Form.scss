@@ -1,4 +1,8 @@
-.form__control{
-    margin-top: -23px;
-    border: none;
+.form__control {
+  margin-top: -23px;
+  margin-bottom: 10px;
+}
+.form__control-inError {
+  margin-top: -23px;
+  border: 2pt solid red !important;
 }

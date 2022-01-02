@@ -75,6 +75,10 @@
   }
 }
 
-.submit__button{
-    margin-top: 10px;
+.submit__button {
+  margin-top: 10px;
+  text-align: right;
+}
+.invalid__qtyamt {
+  color: red;
 }

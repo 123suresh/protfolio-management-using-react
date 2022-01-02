@@ -4,8 +4,9 @@ import "./TransactionList.scss";
 import { BsFillPencilFill } from "react-icons/bs";
 import CommonForm from "../../commons/Form";
 import CommonButton from "../../commons/Button";
-import getDate from "../../utils/Date";
-import getTime from "../../utils/Time";
+import putRequest from "../../services/PutRequest";
+import dateTime from "../../utils/DateTime";
+
 
 const { REACT_APP_URL } = process.env;
 
@@ -45,24 +46,16 @@ function BoughtShareList() {
 
   function updateShare() {
     if (amount !== "" && quantity !== "") {
-      const displayDate= getDate();
-      const displayTime = getTime();
+      const displayDateTime = dateTime();
       const item = {
         company,
         quantity,
         amount,
-        companyId,
-        displayDate,
-        displayTime,
+        displayDateTime,
+        companyId
       };
-      fetch(`${REACT_APP_URL}/boughtShare/${companyId}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(item),
-      }).then((result) => {
+      const url = `${REACT_APP_URL}/boughtShare/${companyId}`;
+    putRequest(url, item).then((result) => {
         result.json().then((resp) => {
           getListBoughtShare();
         });
@@ -83,22 +76,20 @@ function BoughtShareList() {
             <td>Company</td>
             <td>Quantity</td>
             <td>Amount</td>
-            <td>Date</td>
-            <td>Time</td>
+            <td>Date and Time</td>
             <td>Total Amount</td>
             <td>Edit</td>
           </tr>
         </thead>
         <tbody>
           {boughtShareData.map(
-            ({ company, quantity, amount, displayDate, displayTime, id }) => (
+            ({ company, quantity, amount,displayDateTime, id }) => (
               <tr key={id}>
                 <td>{company}</td>
                 <td>{quantity}</td>
                 <td>Rs: {amount}</td>
-                <td>{displayDate}</td>
-                <td>{displayTime}</td>
-                <td>Rs: {quantity * amount}</td>
+                <td>{displayDateTime}</td>
+                <td>Rs: {(quantity * amount).toLocaleString('en-US')}</td>
                 <td>
                   <span className="update__icon" onClick={() => updateCall(id)}>
                     <BsFillPencilFill />
@@ -120,20 +111,32 @@ function BoughtShareList() {
           >
             <Modal.Header closeButton> Edit Share </Modal.Header>
             <Modal.Body>
-              <CommonForm label="Company" value={company} />
+              <CommonForm label="Company" 
+              defaultValue={company}
+              readOnly={true}
+              formClassName='form__control'
+              />
               <CommonForm
                 label="Quantity"
                 value={quantity}
-                type="number"
+                type="numeric"
                 onChange={(e) => setQuantity(e.target.value)}
+                formClassName = {quantity<0?'updatdeForm__control-inError':'updateForm__control'}
               />
+              <div className="update__amtqty-erroe">
+              {quantity<0?<p>enter valid quantity</p>:''}
+              </div>
               <p className="emptyValue">{emptyAmt ? "Enter Quantity" : ""}</p>
               <CommonForm
                 label="Amount"
                 value={amount}
-                type="number"
+                type="numeric"
                 onChange={(e) => setAmount(e.target.value)}
+                formClassName = {amount<0?'updatdeForm__control-inError':'updateForm__control'}
               />
+              <div className="update__amtqty-erroe">
+              {amount<0?<p>enter valid amount</p>:''}
+              </div>
               <p className="emptyValue">{emptyQty ? "Enter Amount" : ""}</p>
             </Modal.Body>
             <Modal.Footer>
@@ -146,7 +149,7 @@ function BoughtShareList() {
               </Button>
               <CommonButton btnName="Confirm" 
               variant='btn btn-success'
-              Onclicked={updateShare} 
+              onClick={updateShare} 
               disabled={!amount || !quantity || !company || amount<0 || quantity<0}
               />
             </Modal.Footer>

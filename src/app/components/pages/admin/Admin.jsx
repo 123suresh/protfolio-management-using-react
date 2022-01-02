@@ -1,12 +1,17 @@
-import React from "react";
+import React,{useContext} from "react";
 import { Navigate } from "react-router-dom";
 import NavigationContext from "../../context/navbar/NavigationContext";
 import "./Admin.scss";
 import CommonCard from "../../commons/Card";
 import OpenShare from "./OpenShare";
+import NoteContext from "../../context/Context";
 
 function Admin() {
   const token = localStorage.getItem("token");
+
+
+  const {totalBoughtAmount} = useContext(NoteContext);
+  const {totalSoldAmount} = useContext(NoteContext);
 
   let loggedIn = true;
 
@@ -31,20 +36,25 @@ function Admin() {
             <div className="card">
               <CommonCard
                 header="Bought Share"
-                totalPrice="Total Price  Rs: 11200"
+                totalPrice={totalBoughtAmount}
                 bgColor="bg-success"
               />
             </div>
             <div className="card__second">
               <CommonCard
                 header="Sold Share"
-                totalPrice="Total Price  Rs: 98470"
+                totalPrice={totalSoldAmount}
                 bgColor="bg-danger"
               />
             </div>
           </div>
         </div>
-      </div>
+
+    {totalBoughtAmount>totalSoldAmount?<p>loss</p>:<p>profit</p>}
+    {totalBoughtAmount>totalSoldAmount?
+    <p>Rs: {(totalBoughtAmount-totalSoldAmount).toLocaleString('en-US')}</p>:
+    <p>Rs: {(totalSoldAmount-totalBoughtAmount).toLocaleString('en-US')}</p>}
+    </div>
     </>
   );
 }

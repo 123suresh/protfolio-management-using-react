@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
+import getRequest from "../../services/GetRequest";
 
 function SoldShareList() {
   const [soldShare, setSoldShare] = useState([]);
@@ -11,14 +12,13 @@ function SoldShareList() {
   }, []);
 
   function getListSoldShare() {
-    fetch(`${REACT_APP_URL}/sellShare`).then((results) => {
+    const url = `${REACT_APP_URL}/sellShare`;
+    getRequest(url).then((results) => {
       results.json().then((resp) => {
         setSoldShare(resp);
       });
     });
   }
-
-  const getTotal = (quantity, amount) => quantity * amount;
 
   return (
     <div className="sold__share-table">
@@ -29,25 +29,22 @@ function SoldShareList() {
             <td>Company</td>
             <td>Quantity</td>
             <td>Amount</td>
-            <td>Date</td>
-            <td>Time</td>
+            <td>Date and Time</td>
             <td>Total Amount</td>
           </tr>
         </thead>
         <tbody>
           {soldShare.map(
-            ({ id, company, quantity, amount, displayDate, displayTime }) => {
+            ({ id, company, quantity, amount, displayDateTime }) => {
               return (
-                <>
+
                   <tr key={id}>
                     <td>{company}</td>
                     <td>{quantity}</td>
                     <td>Rs: {amount}</td>
-                    <td>{displayDate}</td>
-                    <td>{displayTime}</td>
-                    <td>Rs: {getTotal(quantity, amount)}</td>
+                    <td>{displayDateTime}</td>
+                    <td>Rs: {(quantity*amount).toLocaleString('en-US')}</td>
                   </tr>
-                </>
               );
             }
           )}

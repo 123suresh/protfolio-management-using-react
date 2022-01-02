@@ -8,7 +8,7 @@ function CommonCard({ header, cardTitle, totalPrice, bgColor }) {
         <Card.Header>{header}</Card.Header>
         <Card.Body>
           <Card.Title> {cardTitle} </Card.Title>
-          <Card.Text>{totalPrice}</Card.Text>
+          <Card.Text>Total Price Rs:{totalPrice.toLocaleString('en-US')}</Card.Text>
         </Card.Body>
       </Card>
     </div>

@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
+import getRequest from "../../services/GetRequest";
 import "./Admin.scss";
 
 function OpenShare() {
   const [openShareData, setOpenShareData] = useState([]);
+
+  const { REACT_APP_URL } = process.env;
 
   useEffect(() => {
     getList();
   }, []);
 
   function getList() {
-    fetch("http://localhost:3000/openCompanies").then((result) => {
+    const url = `${REACT_APP_URL}/openCompanies`;
+    getRequest(url).then((result) => {
       result.json().then((resp) => {
         setOpenShareData(resp);
       });
     });
+
   }
 
   return (

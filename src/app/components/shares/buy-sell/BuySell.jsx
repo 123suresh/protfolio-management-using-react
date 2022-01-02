@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Form, Table, Modal, Button } from "react-bootstrap";
 import CommonButton from "../../commons/Button";
-import Buttons from "../../commons/Button";
 import CommonForm from "../../commons/Form";
 import Toasts from "../../commons/Toast";
-import getDate from "../../utils/Date";
-import getTime from "../../utils/Time";
+import postRequest from "../../services/PostRequest";
+import dateTime from "../../utils/DateTime";
 import "./BuySellShare.scss";
 
 function BuySell({
@@ -18,7 +17,7 @@ function BuySell({
   bodyClass,
   shareForm,
   btnName,
-  Submit
+  submit
 }) {
   const [amount, setAmount] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -31,18 +30,20 @@ function BuySell({
 
   function SaveUser() {
     if (amount !== "" && quantity !== "") {
-      const displayDate= getDate();
-      const displayTime = getTime();
-      const data = { amount, quantity, company, displayDate, displayTime };
-      fetch(`${urlBuySell}`, {
+      const displayDateTime = dateTime();
+      const data = { amount, quantity, company, displayDateTime};
+      
+      //couldnot do double post at once using single function from servies=>PutRequest
+      fetch('http://localhost:3000/boughtShareSecond', {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      }).then((result) => {
-        console.warn("result", result);
+      })
+
+        postRequest({urlBuySell, data}).then((result) => {
         setShow(false);
         setAmount("");
         setQuantity("");
@@ -61,8 +62,6 @@ function BuySell({
       });
     });
   }
-
-  console.log({ urlSelect });
 
   function GetIndividualDatas(event) {
     const filtered = secondData.filter((el) => el.id == event.target.value);
@@ -85,7 +84,7 @@ function BuySell({
               setShow(false);
             }}
           >
-            <Modal.Header closeButton> Submitted Share </Modal.Header>
+            <Modal.Header closeButton> Confirm Share </Modal.Header>
             <Modal.Body>
               Company:{company}
               <br />
@@ -106,7 +105,7 @@ function BuySell({
               </Button>
               <CommonButton btnName={btnName} 
               variant = "btn btn-success"
-              Onclicked={SaveUser} />
+              onClick={SaveUser} />
             </Modal.Footer>
           </Modal>
         </form>
@@ -121,8 +120,8 @@ function BuySell({
             <label>
               <p>Select Company</p>
             </label>
-            <Form.Select onChange={GetIndividualDatas} className="form__select">
-              <option selected="true" disabled>
+            <Form.Select onChange={GetIndividualDatas} defaultValue={1} className="form__select">
+              <option value="1" disabled>
                 select company
               </option>
               {secondData.map((el, i) => (
@@ -133,7 +132,9 @@ function BuySell({
             </Form.Select>
 
             <div className="amt__qty-main">
+              <div>
               <CommonForm
+                
                 label="Amount"
                 type="number"
                 value={amount}
@@ -141,7 +142,13 @@ function BuySell({
                   setAmount(e.target.value);
                 }}
                 name="amount"
+                formClassName = {amount<0?'form__control-inError':'form__control'}
               />
+              <div className="invalid__qtyamt">
+              {amount<0?<p>enter valid amount</p>:''}
+              </div>
+              </div>
+              <div>
               <div className="quantity">
                 <CommonForm
                   label="Quantity"
@@ -151,9 +158,15 @@ function BuySell({
                     setQuantity(e.target.value);
                   }}
                   name="quantity"
+                  formClassName = {quantity<0?'form__control-inError':'form__control'}
                 />
+              <div className="invalid__qtyamt">
+              {quantity<0?<p>enter valid quantity</p>:''}
+              </div>
+              </div>
               </div>
             </div>
+
             <div className="submit__button">
             <Button
               variant="btn btn-success"
@@ -162,7 +175,7 @@ function BuySell({
               }}
               disabled={!amount || !quantity || !company || amount<0 || quantity<0}
             >
-              {Submit}
+              {submit}
             </Button>
             </div>
           </div>

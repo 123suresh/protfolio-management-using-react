@@ -27,7 +27,6 @@ function BuySellShare() {
             <BuySell
               heading="Sell Share"
               urlSelect={`${REACT_APP_URL}/boughtShare`}
-              // mode={toggle ? "sell" : "buy"}
               shareTable
               urlBuySell={`${REACT_APP_URL}/sellShare`}
               toastText="sold"
@@ -35,7 +34,7 @@ function BuySellShare() {
               bodyClass="soldshare__body"
               shareForm="soldshare__form"
               btnName="Confirm"
-              Submit="Sell"
+              submit="Sell"
             />
           ) : (
             <BuySell
@@ -47,7 +46,7 @@ function BuySellShare() {
               bodyClass="buyshare__body"
               shareForm="buyshare__form"
               btnName="Confirm"
-              Submit="Buy"
+              submit="Buy"
             />
           )}
         </div>

@@ -8,7 +8,6 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
-  const [passErr, setPassErr] = useState(false);
   const [userNameErr, setUserNameErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
 
@@ -39,7 +38,6 @@ function Login() {
     const { value } = e.target;
     e.preventDefault();
     setPassword(value);
-    setPassErr(value.length > 5 ? false : true);
   }
 
   if (loggedIn || localStorage.getItem("token")) {
@@ -63,6 +61,7 @@ function Login() {
               name={username}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              formClassName='form__control'
             />
             <div className="wrong__validation">
               {userNameErr ? <p>Enter Valid Username</p> : ""}
@@ -75,13 +74,11 @@ function Login() {
                 name={password}
                 value={password}
                 onChange={passHandler}
+                formClassName='form__control'
               />
             </div>
             <div className="wrong__validation">
               {passwordErr ? <p>Enter Valid Password</p> : ""}
-            </div>
-            <div className="wrong__validation">
-              {passErr ? <span>Password Not Valid</span> : ""}
             </div>
             <div className="login__submit">
               <Submit variant="warning" submitName="Login" />

@@ -1,12 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
 import BoughtShareList from "./BoughtShareList";
 import SoldShareList from "./SoldShareList";
 import "./TransactionList.scss";
 import { Dropdown } from "react-bootstrap";
 import NavigationContext from "../../context/navbar/NavigationContext";
 import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function TransactionList() {
+  const[dropDown, setDropDown] = useState(false);
   const token = localStorage.getItem("token");
 
   let loggedIn = true;
@@ -29,17 +31,18 @@ function TransactionList() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">All Transaction</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Bought Share</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Sold Share</Dropdown.Item>
+              <Dropdown.Item href="#">
+              <Link to='' onClick={() => setDropDown(false)} className="dropdown__link">Bought Share</Link>
+              </Dropdown.Item>
+              <Dropdown.Item href="#">
+              <Link to='' onClick={() => setDropDown(true)} className="dropdown__link">Sold Share</Link>
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
         <div>
-          <BoughtShareList />
-        </div>
-        <div>
-          <SoldShareList />
+          {dropDown?<SoldShareList />:<BoughtShareList />}
+          
         </div>
       </div>
     </>

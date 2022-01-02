@@ -1,7 +1,18 @@
-.nav__link{
-    
-    color: rgb(212, 123, 123) !important;
+.nav__link {
+  color: rgb(212, 123, 123) !important;
+  margin-left: 30px;
 }
-.link__color{
-    color: #fff !important;
+.link__color {
+  color: #fff !important;
+  margin-left: 30px;
+}
+.bull__image {
+  border-radius: 50%;
+}
+.profile__image {
+  border-radius: 50%;
+}
+.username__profile {
+  text-align: center;
+  font-size: 16px;
 }

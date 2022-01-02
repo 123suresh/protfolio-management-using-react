@@ -5,11 +5,13 @@ import Admin from "../pages/admin/Admin";
 import BuySellShare from "../shares/buy-sell/BuySellShare";
 import TransactionList from "../shares/transactions/TransactionList";
 import Error from "../pages/PageNotFound";
+import ShareTotal from "../context/profit-loss/ShareTotal";
 
 function Routers() {
 
     
   return (
+    <ShareTotal>
     <Router>
       <Routes>
         <Route exact path="/" element={<Login />}></Route>
@@ -19,6 +21,7 @@ function Routers() {
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>
+    </ShareTotal>
   );
 }
 

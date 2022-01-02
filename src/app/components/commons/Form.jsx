@@ -2,21 +2,23 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import "./Form.scss";
 
-function CommonForm({ label, placeholder, type, name, value, onChange }) {
+function CommonForm({ label, placeholder, type, name, value, defaultValue, onChange, readOnly, formClassName }) {
   return (
-    <div className="Form">
+    <div className="common__form">
       <Form>
-        <Form.Group className="" controlId="formBasicEmail">
+        <Form.Group>
           <Form.Label>
             <p>{label}</p>
           </Form.Label>
           <Form.Control
-            className="form__control"
+            className={formClassName}
             type={type}
             placeholder={placeholder}
             name={name}
             value={value}
             onChange={onChange}
+            defaultValue={defaultValue}
+            readOnly={readOnly}
           />
         </Form.Group>
       </Form>

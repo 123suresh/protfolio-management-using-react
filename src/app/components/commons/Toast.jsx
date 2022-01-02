@@ -1,16 +1,18 @@
 import React from "react";
-import { Row, Col, Toast } from "react-bootstrap";
+import { Row, Col, Toast, ToastContainer } from "react-bootstrap";
 
 function CommonToast({ showToast, setShowToast, sell_buy }) {
+  const position = 'top-end';
   return (
+    <ToastContainer position={position}>
     <Row>
-      <Col xs={6}>
+      <Col xs={12}>
         <Toast
           onClose={() => setShowToast(false)}
           show={showToast}
           delay={3000}
           autohide
-          position='top-end'
+          position={position}
         >
           <Toast.Header>
             <img
@@ -20,13 +22,14 @@ function CommonToast({ showToast, setShowToast, sell_buy }) {
             />
             <strong className="me-auto">Form Submitted</strong>
           </Toast.Header>
-          <Toast.Body>Share is successfully {sell_buy}</Toast.Body>
+          <Toast.Body className="bg-dark text-white">Share is successfully {sell_buy}</Toast.Body>
         </Toast>
       </Col>
       {/* <Col xs={6}>
         <Button onClick={() => setShowToast(true)}>Show Toast</Button>
       </Col> */}
     </Row>
+    </ToastContainer>
   );
 }
 
