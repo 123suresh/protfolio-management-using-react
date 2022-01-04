@@ -1,33 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import NoteContext from "../Context";
 import { Navbar, Container, Nav, Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CommonButton from "../../commons/Button";
 import "./NavigationContext.scss";
 import img from "../../images/marketBull.png";
 import profileImg from "../../images/profile.png";
+import { AuthContext } from "../auth-context/Authentication";
+import jwt_decode from "jwt-decode";
 
 function NavigationContext() {
-  const [name, setName] = useState("");
+  const { isAuthenticated } = useContext(AuthContext);
 
-  const navigate = useNavigate();
+  const tokens = localStorage.getItem("token");
+  const decoded = jwt_decode(tokens);
+  const adminName = decoded.name;
+
   function Logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
-    navigate("/");
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("name");
+    // navigate("/");
+    isAuthenticated(false);
   }
-
-  useEffect(() => {
-    setName(localStorage.getItem("name"));
-  }, []);
 
   return (
     <NoteContext.Provider value="">
       <div>
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
           <Container>
-            <img src={img} width="60px" className="bull__image" alt="navigation logo"/>
+            <img
+              src={img}
+              width="60px"
+              className="bull__image"
+              alt="navigation logo"
+            />
             <Link
               to="/admin"
               className={
@@ -67,12 +74,12 @@ function NavigationContext() {
 
               <Dropdown>
                 <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                  {name}
+                  {adminName}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
                   <div className="username__profile">
-                    <p>Username : {name}</p>
+                    <p>Username : {adminName}</p>
                     <Dropdown.Divider />
                     <CommonButton
                       btnName="logout"
@@ -83,7 +90,12 @@ function NavigationContext() {
                 </Dropdown.Menu>
               </Dropdown>
 
-              <img src={profileImg} width="30px" className="profile__image" alt="profilelog"/>
+              <img
+                src={profileImg}
+                width="30px"
+                className="profile__image"
+                alt="profilelog"
+              />
             </Navbar.Collapse>
           </Container>
         </Navbar>

@@ -6,6 +6,7 @@ import Toasts from "../../commons/Toast";
 import postRequest from "../../services/PostRequest";
 import dateTime from "../../utils/DateTime";
 import "./BuySellShare.scss";
+import maxLengthCheckReuse from "../../utils/MaxLengthCheck";
 
 function BuySell({
   heading,
@@ -17,7 +18,7 @@ function BuySell({
   bodyClass,
   shareForm,
   btnName,
-  submit
+  submit,
 }) {
   const [amount, setAmount] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -27,31 +28,36 @@ function BuySell({
   const [show, setShow] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [showTable, setShowTable] = useState(false);
+  const [modalButtonDisabled, setModalButtonDisabled] = useState("");
+  const [showSpinner, setShowSpinner] = useState(false);
 
   function SaveUser() {
     if (amount !== "" && quantity !== "") {
+      setModalButtonDisabled("disabled");
+      setShowSpinner(true);
+
       const displayDateTime = dateTime();
-      const data = { amount, quantity, company, displayDateTime};
-      
+      const data = { amount, quantity, company, displayDateTime };
+
       //couldnot do double post at once using single function from servies=>PutRequest
-      fetch('http://localhost:3000/boughtShareSecond', {
+      fetch("http://localhost:3000/boughtShareSecond", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      })
+      });
 
-        postRequest({urlBuySell, data}).then((result) => {
+      postRequest({ urlBuySell, data }).then((result) => {
         setShow(false);
         setAmount("");
         setQuantity("");
         setCompany("");
         setShowToast(true);
+        setModalButtonDisabled("");
+        setShowSpinner(false);
       });
-    } else {
-      alert("enter valid data");
     }
   }
 
@@ -74,6 +80,29 @@ function BuySell({
     GetDatas();
   }, [urlSelect]);
 
+  const maxLengthCheck = (e) => {
+    const { value, name } = e.target;
+    let maxLength = name === "amount" ? 4 : 3;
+    if (maxLengthCheckReuse(value, maxLength)) {
+      name === "amount" ? setAmount(value) : setQuantity(value);
+    }
+  };
+  // const maxLengthCheck = (e) => {
+  //   const { value, name } = e.target;
+  //   let maxLength = name === "amount" ? 4 : 3;
+  //   if (value.length < maxLength && numberRegex.test(value)) {
+  //     name === "amount" ? setAmount(value) : setQuantity(value);
+  //   }
+  // };
+
+  // const quantityMaxLength = (e) => {
+  //   const { value } = e.target;
+  //   const MaxLength = 3;
+  //   if (value.length < MaxLength && numberRegex.test(value)) {
+  //     setQuantity(value);
+  //   }
+  // };
+
   return (
     <div>
       <div>
@@ -86,26 +115,29 @@ function BuySell({
           >
             <Modal.Header closeButton> Confirm Share </Modal.Header>
             <Modal.Body>
-              Company:{company}
+              Company: {company}
               <br />
-              Amount:{amount}
+              Amount: {amount}
               <br />
-              Quantity:{quantity}
+              Quantity: {quantity}
               <br />
-              {/* date:{date} */}
             </Modal.Body>
             <Modal.Footer>
               <Button
-              variant = "btn btn-danger"
+                variant="btn btn-danger"
                 onClick={() => {
                   setShow(false);
                 }}
               >
                 Cancel
               </Button>
-              <CommonButton btnName={btnName} 
-              variant = "btn btn-success"
-              onClick={SaveUser} />
+              <CommonButton
+                btnName={btnName}
+                variant="btn btn-success"
+                onClick={SaveUser}
+                disabled={modalButtonDisabled}
+                spinner={showSpinner}
+              ></CommonButton>
             </Modal.Footer>
           </Modal>
         </form>
@@ -120,7 +152,11 @@ function BuySell({
             <label>
               <p>Select Company</p>
             </label>
-            <Form.Select onChange={GetIndividualDatas} defaultValue={1} className="form__select">
+            <Form.Select
+              onChange={GetIndividualDatas}
+              defaultValue={1}
+              className="form__select"
+            >
               <option value="1" disabled>
                 select company
               </option>
@@ -133,50 +169,52 @@ function BuySell({
 
             <div className="amt__qty-main">
               <div>
-              <CommonForm
-                
-                label="Amount"
-                type="number"
-                value={amount}
-                onChange={(e) => {
-                  setAmount(e.target.value);
-                }}
-                name="amount"
-                formClassName = {amount<0?'form__control-inError':'form__control'}
-              />
-              <div className="invalid__qtyamt">
-              {amount<0?<p>enter valid amount</p>:''}
-              </div>
+                <CommonForm
+                  label="Amount"
+                  type="text"
+                  value={amount}
+                  onChange={maxLengthCheck}
+                  name="amount"
+                  formClassName={
+                    amount < 0 ? "form__control-inError" : "form__control"
+                  }
+                />
+
+                <div className="invalid__qtyamt">
+                  {amount < 0 ? <p>enter valid amount</p> : ""}
+                </div>
               </div>
               <div>
-              <div className="quantity">
-                <CommonForm
-                  label="Quantity"
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => {
-                    setQuantity(e.target.value);
-                  }}
-                  name="quantity"
-                  formClassName = {quantity<0?'form__control-inError':'form__control'}
-                />
-              <div className="invalid__qtyamt">
-              {quantity<0?<p>enter valid quantity</p>:''}
-              </div>
-              </div>
+                <div className="quantity">
+                  <CommonForm
+                    label="Quantity"
+                    type="text"
+                    value={quantity}
+                    onChange={maxLengthCheck}
+                    name="quantity"
+                    formClassName={
+                      quantity < 0 ? "form__control-inError" : "form__control"
+                    }
+                  />
+                  <div className="invalid__qtyamt">
+                    {quantity < 0 ? <p>enter valid quantity</p> : ""}
+                  </div>
+                </div>
               </div>
             </div>
 
             <div className="submit__button">
-            <Button
-              variant="btn btn-success"
-              onClick={() => {
-                setShow(true);
-              }}
-              disabled={!amount || !quantity || !company || amount<0 || quantity<0}
-            >
-              {submit}
-            </Button>
+              <Button
+                variant="btn btn-success"
+                onClick={() => {
+                  setShow(true);
+                }}
+                disabled={
+                  !amount || !quantity || !company || amount < 0 || quantity < 0
+                }
+              >
+                {submit}
+              </Button>
             </div>
           </div>
         </div>

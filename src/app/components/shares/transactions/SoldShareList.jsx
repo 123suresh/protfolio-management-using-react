@@ -37,14 +37,13 @@ function SoldShareList() {
           {soldShare.map(
             ({ id, company, quantity, amount, displayDateTime }) => {
               return (
-
-                  <tr key={id}>
-                    <td>{company}</td>
-                    <td>{quantity}</td>
-                    <td>Rs: {amount}</td>
-                    <td>{displayDateTime}</td>
-                    <td>Rs: {(quantity*amount).toLocaleString('en-US')}</td>
-                  </tr>
+                <tr key={id}>
+                  <td>{company}</td>
+                  <td>{quantity}</td>
+                  <td>Rs: {amount}</td>
+                  <td>{displayDateTime}</td>
+                  <td>Rs: {(quantity * amount).toLocaleString("en-US")}</td>
+                </tr>
               );
             }
           )}

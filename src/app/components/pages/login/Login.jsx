@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import CommonForm from "../../commons/Form";
 import Submit from "../../commons/Submit";
 import "./Login.scss";
 import { Navigate } from "react-router-dom";
+import { AuthContext } from "../../context/auth-context/Authentication";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
+  // const [loggedIn, setLoggedIn] = useState(false);
   const [userNameErr, setUserNameErr] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
+
+  const { isAuthenticated, auth } = useContext(AuthContext);
 
   const loginName = "Suresh";
   const loginPassword = "admin123";
 
-  const { REACT_APP_TOKEN } = process.env;
-
   const submitForm = (e) => {
     e.preventDefault();
     if (username === loginName && password === loginPassword) {
-      localStorage.setItem("token", `${REACT_APP_TOKEN}`);
-      localStorage.setItem("name", username);
-      setLoggedIn(true);
+      // localStorage.setItem("token", `${REACT_APP_TOKEN}`);
+      // localStorage.setItem("name", username);
+      // setLoggedIn(true);
+      isAuthenticated(true);
     } else {
       if (username !== loginName) {
         setUserNameErr(true);
@@ -40,11 +42,13 @@ function Login() {
     setPassword(value);
   }
 
-  if (loggedIn || localStorage.getItem("token")) {
-    return <Navigate form="/" to="/admin" />;
-  } else {
-    <Navigate to="/" />;
-  }
+  // if (loggedIn || localStorage.getItem("token")) {
+  //   return <Navigate form="/" to="/admin" />;
+  // } else {
+  //   <Navigate to="/" />;
+  // }
+
+  if (auth) return <Navigate to="/admin" />;
 
   return (
     <div className="login__main">
@@ -61,7 +65,7 @@ function Login() {
               name={username}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              formClassName='form__control'
+              formClassName="form__control"
             />
             <div className="wrong__validation">
               {userNameErr ? <p>Enter Valid Username</p> : ""}
@@ -74,7 +78,7 @@ function Login() {
                 name={password}
                 value={password}
                 onChange={passHandler}
-                formClassName='form__control'
+                formClassName="form__control"
               />
             </div>
             <div className="wrong__validation">

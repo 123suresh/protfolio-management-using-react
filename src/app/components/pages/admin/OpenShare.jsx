@@ -1,7 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import getRequest from "../../services/GetRequest";
 import "./Admin.scss";
+
+// const getList = () => {
+//   const url = `${REACT_APP_URL}/openCompanies`;
+//   getRequest(url)
+//   });
+
+// }
 
 function OpenShare() {
   const [openShareData, setOpenShareData] = useState([]);
@@ -9,18 +17,13 @@ function OpenShare() {
   const { REACT_APP_URL } = process.env;
 
   useEffect(() => {
-    getList();
-  }, []);
-
-  function getList() {
     const url = `${REACT_APP_URL}/openCompanies`;
     getRequest(url).then((result) => {
       result.json().then((resp) => {
         setOpenShareData(resp);
       });
     });
-
-  }
+  }, []);
 
   return (
     <>
